@@ -1,140 +1,222 @@
-# Bank System
+<div align="center">
 
-This repository contains a C++ implementation of a Bank System application. The system consists of three modules: Client, Employee, and Admin, each with specific functionalities.
+# 🏦 Bank System
 
-**Description:**
+**A console banking application in C++ with three roles (Client, Employee and Admin), built with OOP and file-based storage.**
 
-This project implements a bank system application in C++, providing functionalities for clients to manage their accounts, employees to manage client information, and administrators to manage employees and system settings.
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
+![OOP](https://img.shields.io/badge/OOP-Inheritance_&_Polymorphism-blue?style=for-the-badge)
+![Visual Studio](https://img.shields.io/badge/Visual_Studio-2022-5C2D91?style=for-the-badge&logo=visualstudio&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 
-**Key Features:**
+</div>
 
-*   Client account management (deposit, withdrawal, transfer, balance check)
-*   Employee management of client data (add, search, list, edit)
-*   Admin management of employee data (add, search, list, edit)
-*   Data persistence using text files
-*   User-friendly menu-driven interface
-*   Input validation to ensure data integrity
+---
 
-This project was developed as a practical exercise in object-oriented programming, data structures, and file handling in C++.  The project is implemented in three phases: Phase 1 establishes the core classes, Phase 2 implements data persistence and expands functionalities, and Phase 3 focuses on the user interface and application flow.  Technologies used: C++, file I/O.
+## 📑 Table of Contents
 
-## Project Structure
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#-architecture)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Class Reference](#-class-reference)
+- [Author](#-author)
 
-The project is structured into three phases, each with its own deadline and deliverables.  The code is organized into header (.h) and source (.cpp) files for each class.
+---
 
-## Phase 1  Core Classes
+## 🌟 Overview
 
-This phase focuses on creating the fundamental classes and their basic functionalities.
+**Bank System** is a menu-driven console application that simulates a small bank. Each user logs in with an ID and password and gets a menu that matches their role:
 
-*   **Client Class:**
-    *   **Attributes:** `int id`, `string name`, `string password`, `double balance`
-    *   **Setters:** `setName(string name)`, `setPassword(string password)`,  (Balance is set during account creation and modified by deposit/withdraw)
-        *   **Validation:** `setName`: Alphabetic characters only, 5-20 characters. `setPassword`: 8-20 characters. Initial balance must be >= 1500.
-    *   **Getters:** `getId()`, `getName()`, `getPassword()`, `getBalance()`
-    *   **Methods:**
-        *   `deposit(double amount)`: Adds `amount` to the balance.
-        *   `withdraw(double amount)`: Subtracts `amount` from the balance (check for sufficient funds).
-        *   `transferTo(double amount, Client& recipient)`: Transfers `amount` to another client's account (check for sufficient funds).
-        *   `checkBalance()`: Displays the current balance.
-        *   `display()`: Displays client information (ID, name, balance).
+| Role | Can do |
+|---|---|
+| 👤 **Client** | Deposit, withdraw, transfer to another client, check balance, update password |
+| 🧑‍💼 **Employee** | Everything a client can see, plus add, search, list and edit **clients** |
+| 🛡️ **Admin** | Everything an employee can do, plus add, search, list and edit **employees** |
 
-*   **Employee Class:**
-    *   **Attributes:** `int id`, `string name`, `string password`, `double salary`
-    *   **Setters:** `setName(string name)`, `setPassword(string password)`, `setSalary(double salary)`
-        *   **Validation:** `setName`: Alphabetic characters only, 5-20 characters. `setPassword`: 8-20 characters. `setSalary`: Minimum salary 5000.
-    *   **Getters:** `getId()`, `getName()`, `getPassword()`, `getSalary()`
-    *   **Methods:** `display()`: Displays employee information (ID, name, salary).
+All data is saved in plain text files, so it survives between runs.
 
-*   **Admin Class:** Inherits from `Employee`.
-    *   **Attributes:** (Inherited)
-    *   **Setters:** (Inherited)
-    *   **Getters:** (Inherited)
-    *   **Methods:** (Inherited)
+It was built as a **Programming 2** project to practice object-oriented programming, file handling and clean separation of responsibilities in C++.
 
-*   **Validation Class:**
-    *   **Static Methods:**
-        *   `isValidName(string name)`: Validates name.
-        *   `isValidPassword(string password)`: Validates password.
-        *   `isValidBalance(double balance)`: Validates initial balance.
-        *   `isValidSalary(double salary)`: Validates salary.
+---
 
-## Phase 2  Data Persistence and Functionality
+## ✨ Features
 
-This phase introduces file storage and expands the classes with data management capabilities.
+- 🔐 **Role-based login** for clients, employees and admins
+- 💰 **Account operations**: deposit, withdraw, transfer, balance check (with insufficient-funds checks)
+- 🗂️ **Client and employee management**: add, search by ID, list all, edit
+- 💾 **Persistent storage** in `Clients.txt`, `Employees.txt` and `Admins.txt`
+- ✅ **Input validation**:
+  - Names: letters only, 5–20 characters
+  - Passwords: 8–20 characters
+  - Client opening balance: at least **1500**
+  - Employee salary: at least **5000**
+- 🧭 **Menu-driven interface** with clear screens for each role
 
-*   **Data Storage:**
-    *   `Clients.txt`: Stores client data (ID, name, password, balance - comma-separated).
-    *   `Employees.txt`: Stores employee data (ID, name, password, salary - comma-separated).
-    *   `Admins.txt`: Stores admin data (ID, name, password, salary - comma-separated).
+---
 
-*   **DataSourceInterface:**
-    *   **Abstract Methods:** `addClient(Client)`, `addEmployee(Employee)`, `addAdmin(Admin)`, `getAllClients()`, `getAllEmployees()`, `getAllAdmins()`, `removeAllClients()`, `removeAllEmployees()`, `removeAllAdmins()`
+## 🏛 Architecture
 
-*   **FileManager:** Implements `DataSourceInterface`.  Handles file I/O operations for all data storage files.
+```mermaid
+classDiagram
+    class Person {
+        id
+        name
+        password
+    }
+    class Client {
+        balance
+        deposit()
+        withdraw()
+        transferTo()
+        checkBalance()
+    }
+    class Employee {
+        salary
+        addClient()
+        searchClient()
+        listClients()
+        editClient()
+    }
+    class Admin {
+        addEmployee()
+        searchEmployee()
+        listEmployees()
+        editEmployee()
+    }
+    class DataSourceInterface {
+        <<interface>>
+    }
+    Person <|-- Client
+    Person <|-- Employee
+    Employee <|-- Admin
+    DataSourceInterface <|.. FileManager
+    FileManager ..> FileHelper
+    FileHelper ..> Parser
+```
 
-*   **Client Class Enhancements:** (See Phase 1)
+| Layer | Classes | Responsibility |
+|---|---|---|
+| **Models** | `Person`, `Client`, `Employee`, `Admin` | Data and business rules |
+| **Validation** | `Validation` | Static checks for names, passwords, balance and salary |
+| **Data** | `DataSourceInterface`, `FileManager`, `FileHelper`, `Parser` | Reading and writing the text files |
+| **UI** | `Screens`, `ClientManager`, `EmployeeManager`, `AdminManager` | Menus and application flow |
 
-*   **Employee Class Enhancements:**
-    *   `addClient(Client& client)`: Adds a new client to the system (and `Clients.txt`).
-    *   `searchClient(int id)`: Searches for a client by ID.
-    *   `listClients()`: Lists all clients.
-    *   `editClient(int id, string name, string password, double balance)`: Edits client information in the system and updates `Clients.txt`.
+---
 
-*   **Admin Class Enhancements:**
-    *   (Inherits Employee functionalities)
-    *   `addEmployee(Employee& employee)`: Adds a new employee to the system (and `Employees.txt`).
-    *   `searchEmployee(int id)`: Searches for an employee by ID.
-    *   `editEmployee(int id, string name, string password, double salary)`: Edits employee information in the system and updates `Employees.txt`.
-    *   `listEmployees()`: Lists all employees.
+## 📂 Project Structure
 
-*   **Parser Class:**
-    *   **Static Methods:**
-        *   `split(string line)`: Splits a line from a file into a vector of strings (using a delimiter like comma).
-        *   `parseToClient(string line)`: Creates a `Client` object from a parsed line.
-        *   `parseToEmployee(string line)`: Creates an `Employee` object from a parsed line.
-        *   `parseToAdmin(string line)`: Creates an `Admin` object from a parsed line.
+```
+Bank/
+├── Programming2_Project.cpp      # main() → Screens::runApp()
+├── Programming2_Project.vcxproj  # Visual Studio project
+│
+├── Person.h / .cpp               # Base class
+├── Client.h / .cpp
+├── Employee.h / .cpp
+├── Admin.h / .cpp
+├── Validation.h / .cpp
+│
+├── DataSourceInterface.h / .cpp  # Storage contract
+├── FileManager.h / .cpp          # Implements DataSourceInterface
+├── FileHelper.h / .cpp           # File read/write helpers
+├── Parser.h / .cpp               # Text line → object
+│
+├── Screens.h / .cpp              # Welcome + login screens
+├── ClientManager.h / .cpp        # Client menu
+├── EmployeeManager.h / .cpp      # Employee menu
+├── AdminManager.h / .cpp         # Admin menu
+│
+├── Clients.txt                   # Sample data
+├── Employees.txt
+└── Admins.txt
+```
 
-*   **FilesHelper Class:**
-    *   **Static Methods:**
-        *   `saveLast(string fileName, int id)`: Saves the last used ID to a file (e.g., `last_client_id.txt`).
-        *   `getLast(string fileName)`: Retrieves the last used ID from a file.
-        *   `saveClient(Client c)`: Saves client data to `Clients.txt`.
-        *   `saveEmployee(string fileName, string lastIdFile, Employee e)`: Saves employee data to `Employees.txt`.
-        *   `getClients()`: Retrieves all clients from `Clients.txt`.
-        *   `getEmployees()`: Retrieves all employees from `Employees.txt`.
-        *   `getAdmins()`: Retrieves all admins from `Admins.txt`.
-        *   `clearFile(string fileName, string lastIdFile)`: Clears the content of a data file.
+---
 
-## Phase 3  User Interface and Application Flow
+## 🚀 Getting Started
 
-This phase focuses on creating the user interface and managing the overall application flow.
+### Prerequisites
 
-*   **ClientManager Class:**
-    *   **Static Methods:**
-        *   `printClientMenu()`: Displays the client menu options.
-        *   `updatePassword(Person* person)`: Allows a user to update their password.
-        *   `login(int id, string password)`: Handles client login.
-        *   `clientOptions(Client* client)`: Manages client menu options.
+- Windows
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) with the **Desktop development with C++** workload
 
-*   **EmployeeManager Class:**
-    *   **Static Methods:**
-        *   `printEmployeeMenu()`: Displays the employee menu options.
-        *   `newClient(Employee* employee)`: Handles creating a new client.
-        *   `listAllClients(Employee* employee)`: Lists all clients.
-        *   `searchForClient(Employee* employee)`: Searches for a client.
-        *   `editClientInfo(Employee* employee)`: Edits client information.
-        *   `login(int id, string password)`: Handles employee login.
-        *   `employeeOptions(Employee* employee)`: Manages employee menu options.
+### Run
 
-*   **AdminManager Class:**
-    *   **Static Methods:**
-        *   `printAdminMenu()`: Displays the admin menu options.
-        *   `login(int id, string password)`: Handles admin login.
-        *   `adminOptions(Admin* admin)`: Manages admin menu options.
+1. Clone the repository
+   ```bash
+   git clone https://github.com/ahmedramzyelsheikh/Bank.git
+   ```
+2. Open `Programming2_Project.vcxproj` in Visual Studio.
+3. Press **F5** to build and run.
 
-*   **Screens Class:**
-    *   **Static Methods:**
-        *   `bankName()`: Displays the bank name.
-        *   `welcome()`: Displays the welcome message.
-        *   `loginOptions()`: Displays login options (client, employee, admin).
-        *   `loginAs()`: Gets user input for login role.
-        *   `invalid(int c)`: Displays an invalid input message
+Sample accounts for each role are in `Clients.txt`, `Employees.txt` and `Admins.txt`. Each line holds `id name password balance/salary`.
+
+> ℹ️ The app uses `system("cls")` to clear the screen, so it is meant for the Windows console.
+
+---
+
+## 📘 Class Reference
+
+<details>
+<summary><b>Models</b></summary>
+
+**Client**: `id`, `name`, `password`, `balance`
+- `deposit(amount)`, `withdraw(amount)`, `transferTo(amount, recipient)` (all check for sufficient funds)
+- `checkBalance()`, `display()`
+
+**Employee**: `id`, `name`, `password`, `salary`
+- `addClient(client)`, `searchClient(id)`, `listClients()`, `editClient(id, name, password, balance)`
+
+**Admin** (inherits `Employee`)
+- `addEmployee(employee)`, `searchEmployee(id)`, `listEmployees()`, `editEmployee(id, name, password, salary)`
+
+</details>
+
+<details>
+<summary><b>Validation</b></summary>
+
+Static methods: `isValidName(name)`, `isValidPassword(password)`, `isValidBalance(balance)`, `isValidSalary(salary)`.
+
+</details>
+
+<details>
+<summary><b>Data layer</b></summary>
+
+**DataSourceInterface** (abstract): `addClient`, `addEmployee`, `addAdmin`, `getAllClients`, `getAllEmployees`, `getAllAdmins`, `removeAllClients`, `removeAllEmployees`, `removeAllAdmins`.
+
+**FileManager**: implements `DataSourceInterface` on top of the text files.
+
+**FileHelper**: `saveLast`, `getLast` (last used ID), `saveClient`, `saveEmployee`, `getClients`, `getEmployees`, `getAdmins`, `clearFile`.
+
+**Parser**: `split(line)`, `parseToClient(line)`, `parseToEmployee(line)`, `parseToAdmin(line)`.
+
+</details>
+
+<details>
+<summary><b>User interface</b></summary>
+
+**Screens**: `bankName()`, `welcome()`, `loginOptions()`, `loginAs()`, `invalid(choice)`, `runApp()`.
+
+**ClientManager**: `printClientMenu()`, `updatePassword(person)`, `login(id, password)`, `clientOptions(client)`.
+
+**EmployeeManager**: `printEmployeeMenu()`, `newClient()`, `listAllClients()`, `searchForClient()`, `editClientInfo()`, `login()`, `employeeOptions()`.
+
+**AdminManager**: `printAdminMenu()`, `login()`, `adminOptions()`.
+
+</details>
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+**Ahmed Ramzy**
+
+[![GitHub](https://img.shields.io/badge/GitHub-ahmedramzyelsheikh-181717?style=for-the-badge&logo=github)](https://github.com/ahmedramzyelsheikh)
+
+⭐ If you like this project, give it a star!
+
+</div>
